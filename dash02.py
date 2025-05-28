@@ -5,7 +5,7 @@ import requests
 from io import BytesIO
 
 # Заголовок приложения
-st.title("Анализ показателей «Факт» и «Факт Валовая прибыль»")
+st.title("Анализ показателей «Факт ОП» и «Факт Валовая прибыль»")
 
 # Ссылка на Excel-файл в GitHub
 FILE_URL = "https://raw.githubusercontent.com/N-sam-sn/N/main/Data01.xlsx"
@@ -70,23 +70,23 @@ else:
         height=500
     )
 
-    # График 1: Факт vs План на месяц
+    # График 1: Факт ОП vs План ОП
     fig_fact = go.Figure()
     fig_fact.add_trace(go.Bar(
-        name="Факт", 
+        name="Факт ОП", 
         x=agg_sorted_fact["Вид плана продаж"], 
         y=agg_sorted_fact["Факт"],
         marker_color='#1f77b4'
     ))
     fig_fact.add_trace(go.Bar(
-        name="План на месяц", 
+        name="План ОП", 
         x=agg_sorted_fact["Вид плана продаж"], 
         y=agg_sorted_fact["План на месяц"],
         marker_color='#ff7f0e'
     ))
     fig_fact.update_layout(
         barmode="group",
-        title="Факт vs План на месяц (сортировка по Факту)",
+        title="Факт ОП vs План ОП (сортировка по Факту)",
         xaxis_title="Вид плана продаж",
         yaxis_title="Сумма",
         height=500
