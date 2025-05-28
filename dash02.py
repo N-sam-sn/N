@@ -6,7 +6,7 @@ import streamlit as st
 st.title("Анализ показателей «Факт» и «Факт Валовая прибыль»")
 
 # Путь к Excel-файлу
-FILE_PATH ="https://github.com/N-sam-sn/N/blob/main/Data01.xlsx"
+FILE_PATH ="https://raw.githubusercontent.com/N-sam-sn/N/main/Data01.xlsx"
 print("FILE_PATH -",FILE_PATH )
 @st.cache_data
 def load_data(path):
