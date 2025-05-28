@@ -31,7 +31,7 @@ sel_kanal = st.sidebar.selectbox("Канал", kanals)
 sel_otdel = st.sidebar.selectbox("Отдел", otdels)
 sel_region = st.sidebar.selectbox("Регион", regions)
 
-# Фильтрация данных
+# Применяем фильтрацию
 filtered = df.copy()
 if sel_kanal != "Все":
     filtered = filtered[filtered["Канал"] == sel_kanal]
@@ -40,26 +40,80 @@ if sel_otdel != "Все":
 if sel_region != "Все":
     filtered = filtered[filtered["Регион"] == sel_region]
 
-# Вывод фильтрации
 st.markdown(f"**Показатели для**:  "
             f"{'Канал = ' + sel_kanal if sel_kanal!='Все' else ''}  "
             f"{'Отдел = ' + sel_otdel if sel_otdel!='Все' else ''}  "
             f"{'Регион = ' + sel_region if sel_region!='Все' else ''}")
 
-# Визуализация
 if filtered.empty:
     st.warning("Нет данных для выбранных фильтров.")
 else:
-    agg = filtered.groupby("Покупатель")[["Факт", "Факт Валовая прибыль"]].sum().reset_index()
-    fig = go.Figure([
-        go.Bar(name="Факт", x=agg["Покупатель"], y=agg["Факт"]),
-        go.Bar(name="Факт Валовая прибыль", x=agg["Покупатель"], y=agg["Факт Валовая прибыль"])
+    # Группируем по покупателю и суммируем ВСЕ необходимые столбцы
+    agg = filtered.groupby("Вид плана продаж")[
+        ["Факт", "План на месяц", "Факт Валовая прибыль", "План Валовая прибыль"]
+    ].sum().reset_index()
+
+    # Сортируем данные для графиков
+    agg_sorted_fact = agg.sort_values(by="Факт", ascending=False)
+    agg_sorted_profit = agg.sort_values(by="Факт Валовая прибыль", ascending=False)
+
+    # Исходный график (оставляем как есть)
+    fig_original = go.Figure([
+        go.Bar(name="Факт ОП", x=agg["Вид плана продаж"], y=agg["Факт"]),
+        go.Bar(name="Факт Валовая прибыль", x=agg["Вид плана продаж"], y=agg["Факт Валовая прибыль"])
     ])
-    fig.update_layout(
+    fig_original.update_layout(
         barmode="group",
-        xaxis_title="Покупатель",
+        title="Факт ОП vs Факт Валовая прибыль",
+        xaxis_title="Вид плана продаж",
         yaxis_title="Сумма",
-        height=600,
-        width=900
+        height=500
     )
-    st.plotly_chart(fig, use_container_width=True)
+
+    # График 1: Факт vs План на месяц
+    fig_fact = go.Figure()
+    fig_fact.add_trace(go.Bar(
+        name="Факт", 
+        x=agg_sorted_fact["Вид плана продаж"], 
+        y=agg_sorted_fact["Факт"],
+        marker_color='#1f77b4'
+    ))
+    fig_fact.add_trace(go.Bar(
+        name="План на месяц", 
+        x=agg_sorted_fact["Вид плана продаж"], 
+        y=agg_sorted_fact["План на месяц"],
+        marker_color='#ff7f0e'
+    ))
+    fig_fact.update_layout(
+        barmode="group",
+        title="Факт vs План на месяц (сортировка по Факту)",
+        xaxis_title="Вид плана продаж",
+        yaxis_title="Сумма",
+        height=500
+    )
+
+    # График 2: Факт Валовая прибыль vs План Валовая прибыль
+    fig_profit = go.Figure()
+    fig_profit.add_trace(go.Bar(
+        name="Факт Валовая прибыль", 
+        x=agg_sorted_profit["Вид плана продаж"], 
+        y=agg_sorted_profit["Факт Валовая прибыль"],
+        marker_color='#2ca02c'
+    ))
+    fig_profit.add_trace(go.Bar(
+        name="План Валовая прибыль", 
+        x=agg_sorted_profit["Вид плана продаж"], 
+        y=agg_sorted_profit["План Валовая прибыль"],
+        marker_color='#d62728'
+    ))
+    fig_profit.update_layout(
+        barmode="group",
+        title="Валовая прибыль: Факт vs План (сортировка по Факту)",
+        xaxis_title="Вид плана продаж",
+        yaxis_title="Сумма",
+        height=500
+    )
+    #st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig_original, use_container_width=True)
+    st.plotly_chart(fig_fact, use_container_width=True)
+    st.plotly_chart(fig_profit, use_container_width=True)
