@@ -63,7 +63,7 @@ else:
         go.Bar(name="Факт ОП", x=agg["Вид плана продаж"], y=agg["Факт"],marker_color='#2ca02c'),
         go.Bar(name="Тенденция ОП", x=agg["Вид плана продаж"], y=agg["Тенденция по кол-ву рабочих дней"],marker_color='#1ca82c'),
         go.Bar(name="Факт Валовая прибыль", x=agg["Вид плана продаж"], y=agg["Факт Валовая прибыль"],marker_color='#1f77b4'),
-        go.Bar(name="Тенденция ВП", x=agg["Вид плана продаж"], y=agg["ТВП Тенденция по кол-ву рабочих дней"],marker_color='#1f77b4')
+        go.Bar(name="Тенденция ВП", x=agg["Вид плана продаж"], y=agg["ВП Тенденция по кол-ву рабочих дней"],marker_color='#1f77b4')
     ])
     fig_original.update_layout(
         barmode="group",
