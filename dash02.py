@@ -1,22 +1,25 @@
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+import requests
+from io import BytesIO
 
 # Заголовок приложения
 st.title("Анализ показателей «Факт» и «Факт Валовая прибыль»")
 
-# Путь к Excel-файлу
-#FILE_PATH ="https://raw.githubusercontent.com/N-sam-sn/N/main/Data01.xlsx"
-FILE_PATH = "https://raw.githubusercontent.com/N-sam-sn/N/main/Data01.xlsx"
+# Ссылка на Excel-файл в GitHub
+FILE_URL = "https://raw.githubusercontent.com/N-sam-sn/N/main/Data01.xlsx"
 
-print("FILE_PATH -",FILE_PATH )
 @st.cache_data
-def load_data(path):
-    df = pd.read_excel(path)
+def load_data(url):
+    response = requests.get(url)
+    response.raise_for_status()  # Проверка на ошибки загрузки
+    data = BytesIO(response.content)
+    df = pd.read_excel(data)
     df.columns = df.columns.str.strip()
     return df
 
-df = load_data(FILE_PATH)
+df = load_data(FILE_URL)
 
 # Сайдбар с фильтрами
 st.sidebar.header("Фильтры")
@@ -29,7 +32,7 @@ sel_kanal = st.sidebar.selectbox("Канал", kanals)
 sel_otdel = st.sidebar.selectbox("Отдел", otdels)
 sel_region = st.sidebar.selectbox("Регион", regions)
 
-# Применяем фильтрацию
+# Фильтрация данных
 filtered = df.copy()
 if sel_kanal != "Все":
     filtered = filtered[filtered["Канал"] == sel_kanal]
@@ -38,18 +41,17 @@ if sel_otdel != "Все":
 if sel_region != "Все":
     filtered = filtered[filtered["Регион"] == sel_region]
 
+# Вывод фильтрации
 st.markdown(f"**Показатели для**:  "
             f"{'Канал = ' + sel_kanal if sel_kanal!='Все' else ''}  "
             f"{'Отдел = ' + sel_otdel if sel_otdel!='Все' else ''}  "
             f"{'Регион = ' + sel_region if sel_region!='Все' else ''}")
 
+# Визуализация
 if filtered.empty:
     st.warning("Нет данных для выбранных фильтров.")
 else:
-    # Группируем по покупателю и суммируем
     agg = filtered.groupby("Покупатель")[["Факт", "Факт Валовая прибыль"]].sum().reset_index()
-
-    # Строим график
     fig = go.Figure([
         go.Bar(name="Факт", x=agg["Покупатель"], y=agg["Факт"]),
         go.Bar(name="Факт Валовая прибыль", x=agg["Покупатель"], y=agg["Факт Валовая прибыль"])
@@ -61,5 +63,4 @@ else:
         height=600,
         width=900
     )
-
     st.plotly_chart(fig, use_container_width=True)
