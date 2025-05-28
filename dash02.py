@@ -20,7 +20,7 @@ def load_data(url):
 
 df = load_data(FILE_URL)
 
-# Сайдбар с фильтрами
+# Сайдбар с фильтрами- План /Факт/ Прогноз
 st.sidebar.header("Фильтры")
 
 kanals = ["Все"] + sorted(df["Канал"].dropna().unique().tolist())
@@ -50,17 +50,19 @@ if filtered.empty:
 else:
     # Группируем по покупателю и суммируем ВСЕ необходимые столбцы
     agg = filtered.groupby("Вид плана продаж")[
-        ["Факт", "План на месяц", "Факт Валовая прибыль", "План Валовая прибыль"]
+        ["Факт", "План на месяц", "Факт Валовая прибыль", "План Валовая прибыль","Тенденция по кол-ву рабочих дней","ВП Тенденция по кол-ву рабочих дней"]
     ].sum().reset_index()
 
     # Сортируем данные для графиков
     agg_sorted_fact = agg.sort_values(by="Факт", ascending=False)
     agg_sorted_profit = agg.sort_values(by="Факт Валовая прибыль", ascending=False)
+    #agg_sorted_profit = agg.sort_values(by="ВП Тенденция по кол-ву рабочих дней", ascending=False)
 
     # Исходный график (оставляем как есть)
     fig_original = go.Figure([
         go.Bar(name="Факт ОП", x=agg["Вид плана продаж"], y=agg["Факт"]),
-        go.Bar(name="Факт Валовая прибыль", x=agg["Вид плана продаж"], y=agg["Факт Валовая прибыль"])
+        go.Bar(name="Факт Валовая прибыль", x=agg["Вид плана продаж"], y=agg["Факт Валовая прибыль"]),
+        go.Bar(name="ВП Тенденция по кол-ву рабочих дней", x=agg["Вид плана продаж"], y=agg["ВП Тенденция по кол-ву рабочих дней"])
     ])
     fig_original.update_layout(
         barmode="group",
@@ -84,6 +86,12 @@ else:
         y=agg_sorted_fact["План на месяц"],
         marker_color='#ff7f0e'
     ))
+    fig_fact.add_trace(go.Bar(
+        name="Тенденция ОП", 
+        x=agg_sorted_fact["Вид плана продаж"], 
+        y=agg_sorted_fact["Тенденция по кол-ву рабочих дней"],
+        marker_color='#cf8f0e'
+    ))
     fig_fact.update_layout(
         barmode="group",
         title="Факт ОП vs План ОП (сортировка по Факту)",
@@ -105,6 +113,12 @@ else:
         x=agg_sorted_profit["Вид плана продаж"], 
         y=agg_sorted_profit["План Валовая прибыль"],
         marker_color='#d62728'
+    ))
+    fig_profit.add_trace(go.Bar(
+        name="Тенденция ВП", 
+        x=agg_sorted_profit["Вид плана продаж"], 
+        y=agg_sorted_profit["ВП Тенденция по кол-ву рабочих дней"],
+        marker_color='#f62928'
     ))
     fig_profit.update_layout(
         barmode="group",
