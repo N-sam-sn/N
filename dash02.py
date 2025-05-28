@@ -13,9 +13,8 @@ FILE_URL = "https://raw.githubusercontent.com/N-sam-sn/N/main/Data01.xlsx"
 @st.cache_data
 def load_data(url):
     response = requests.get(url)
-    response.raise_for_status()  # Проверка на ошибки загрузки
-    data = BytesIO(response.content)
-    df = pd.read_excel(data)
+    response.raise_for_status()  # Проверка ошибок
+    df = pd.read_excel(BytesIO(response.content))
     df.columns = df.columns.str.strip()
     return df
 
