@@ -78,19 +78,19 @@ else:
         name="Факт ОП", 
         x=agg_sorted_fact["Вид плана продаж"], 
         y=agg_sorted_fact["Факт"],
-        marker_color='#1f77b4'
+        marker_color='#2ca02c'
     ))
     fig_fact.add_trace(go.Bar(
         name="План ОП", 
         x=agg_sorted_fact["Вид плана продаж"], 
         y=agg_sorted_fact["План на месяц"],
-        marker_color='#ff7f0e'
+        marker_color='#d62728'
     ))
     fig_fact.add_trace(go.Bar(
         name="Тенденция ОП", 
         x=agg_sorted_fact["Вид плана продаж"], 
         y=agg_sorted_fact["Тенденция по кол-ву рабочих дней"],
-        marker_color='#cf8f0e'
+        marker_color='#1f77b4'
     ))
     fig_fact.update_layout(
         barmode="group",
@@ -118,7 +118,7 @@ else:
         name="Тенденция ВП", 
         x=agg_sorted_profit["Вид плана продаж"], 
         y=agg_sorted_profit["ВП Тенденция по кол-ву рабочих дней"],
-        marker_color='#a62928'
+        marker_color='#1f77b4'
     ))
     fig_profit.update_layout(
         barmode="group",
