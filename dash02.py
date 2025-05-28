@@ -118,7 +118,7 @@ else:
         name="Тенденция ВП", 
         x=agg_sorted_profit["Вид плана продаж"], 
         y=agg_sorted_profit["ВП Тенденция по кол-ву рабочих дней"],
-        marker_color='#f62928'
+        marker_color='#w62928'
     ))
     fig_profit.update_layout(
         barmode="group",
