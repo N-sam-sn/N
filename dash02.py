@@ -6,7 +6,7 @@ import pygame
 from io import BytesIO
 
 # Загружаем и отображаем эмодзи
-EMOJI_URL = "https://raw.githubusercontent.com/N-sam-sn/N/main/B01r.png"
+EMOJI_URL = "https://github.com/N-sam-sn/N/blob/main/B01r.png"
 try:
     response = requests.get(EMOJI_URL, timeout=5)
     response.raise_for_status()
