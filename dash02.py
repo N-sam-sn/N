@@ -5,11 +5,25 @@ import requests
 import pygame
 from io import BytesIO
 
+# Загружаем и отображаем эмодзи
+EMOJI_URL = "https://raw.githubusercontent.com/N-sam-sn/N/main/B01r.png"
+try:
+    response = requests.get(EMOJI_URL, timeout=5)
+    response.raise_for_status()
+    emoji_image = Image.open(BytesIO(response.content))
+    
+    # Создаем две колонки: для заголовка и эмодзи
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        st.title("Анализ показателей «Факт ОП» и «Факт Валовая прибыль»")
+    with col2:
+        st.image(emoji_image, width=80, caption="Эмодзи")
+except Exception as e:
+    st.error(f"Ошибка загрузки эмодзи: {str(e)}")
+    st.title("Анализ показателей «Факт ОП» и «Факт Валовая прибыль»")
+
 # Заголовок приложения
-st.title("Анализ показателей «Факт ОП» и «Факт Валовая прибыль»")
-saved_emoji = pygame.image.load("https://raw.githubusercontent.com/N-sam-sn/N/main/B01r.png")
-screen.blit(saved_emoji, (100, 100))
-pygame.display.flip()
+
 
 # Ссылка на Excel-файл в GitHub
 FILE_URL = "https://raw.githubusercontent.com/N-sam-sn/N/main/Data01.xlsx"
