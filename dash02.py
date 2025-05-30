@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 import requests
+import pygame
 from io import BytesIO
 
 # Заголовок приложения
