@@ -8,6 +8,7 @@ from io import BytesIO
 st.title("Анализ показателей «Факт ОП» и «Факт Валовая прибыль»")
 saved_emoji = pygame.image.load("https://raw.githubusercontent.com/N-sam-sn/N/main/B01r.png")
 screen.blit(saved_emoji, (100, 100))
+pygame.display.flip()
 
 # Ссылка на Excel-файл в GitHub
 FILE_URL = "https://raw.githubusercontent.com/N-sam-sn/N/main/Data01.xlsx"
