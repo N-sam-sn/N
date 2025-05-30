@@ -7,7 +7,7 @@ from io import BytesIO
 
 # Заголовок приложения
 st.title("Анализ показателей «Факт ОП» и «Факт Валовая прибыль»")
-saved_emoji = pygame.image.load("https://raw.githubusercontent.com/N-sam-sn/N/main/B01r.png")
+saved_emoji = pygame.image.load("https://github.com/N-sam-sn/N/blob/main/B01r.png")
 screen.blit(saved_emoji, (100, 100))
 pygame.display.flip()
 
