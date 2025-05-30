@@ -8,7 +8,7 @@ from io import BytesIO
 # Загружаем и отображаем эмодзи
 #emoji_image = Image.open("B01r.png")
 #st.image(emoji_image, width=80)
-EMOJI_URL = "hhttps://raw.githubusercontent.com/N-sam-sn/N/main/B01r.png"
+EMOJI_URL = "https://raw.githubusercontent.com/N-sam-sn/N/main/B01r.png"
 
 try:
     response = requests.get(EMOJI_URL, timeout=5)
